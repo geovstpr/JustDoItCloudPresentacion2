@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>JustDoIt! - Reporte de Tareas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="container">
+
+    <aside class="sidebar">
+        <div class="logo">
+            <a th:href="@{/}"><img th:src="@{/images/JustDoIt.png}" alt="JustDoIt Logo" width="200" height="200"></a>
+        </div>
+        <nav class="navigation">
+            <h3>Tareas</h3>
+            <ul>
+                <li><a th:href="@{/user/tasks}">Tareas de usuario actual</a></li>
+                <li><a th:href="@{/user/tasks/report}">Reporte de tareas</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="content">
+        <h1>Reporte de tareas del usuario</h1>
+
+        <div th:replace="fragments/user-info :: userInfo(${user})"></div>
+
+        <table style="width:100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+            <tr>
+                <th style="border: 1px solid #ccc; padding: 10px; background-color: #f4f4f4; text-align: left;">Tarea</th>
+                <th style="border: 1px solid #ccc; padding: 10px; background-color: #f4f4f4; text-align: left;">Estado</th>
+                <th style="border: 1px solid #ccc; padding: 10px; background-color: #f4f4f4; text-align: left;">Fecha Límite</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${user.tasks}">
+                <td style="border: 1px solid #ccc; padding: 10px;" th:text="${task.description}">Nombre tarea</td>
+                <td style="border: 1px solid #ccc; padding: 10px;" th:text="${task.status == T(teccr.justdoitcloud.data.Task.Status).DONE} ? 'Completada' :
+                                (${task.status == T(teccr.justdoitcloud.data.Task.Status).INPROGRESS} ? 'En Progreso' : 'Pendiente')">Estado</td>
+                <td style="border: 1px solid #ccc; padding: 10px;" th:text="${task.deadline != null} ? ${#temporals.format(task.deadline, 'dd/MMMM/yyyy', new java.util.Locale('es'))} : 'No especificada'">Fecha</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </main>
+</div>
+</body>
+</html>
